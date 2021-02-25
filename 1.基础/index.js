@@ -1,14 +1,51 @@
 
 const target = "(1 + ((2 + 3) * (4 * 5)))"
 
-const ops = []
-const vals = []
 
+function parse(str) {
+    const ops = []
+    const vals = []
+    const strArr = str.split("")
 
-const compose = f => g => x => f(g(x))
+    while (strArr.length) {
 
-const calc = compose(stringJoin)
+        if (strArr.shift() === "(") {
+            continue
+        }
 
-function stringJoin(str) {
-    return str.join("")
+        if (strArr.shift() === ")") {
+            const a = vals.pop()
+            const b = vals.pop()
+            const token = ops.pop()
+
+            switch (token) {
+                case "+":
+                    vals.push(a + b)
+                case "-":
+                    vals.push(a - b)
+                case "*":
+                    vals.push(a * b)
+                case "/":
+                    vals.push(result = a / b)
+                default:
+                    continue
+            }
+        } else {
+            switch (strArr.shift()) {
+                case "+":
+                case "-":
+                case "*":
+                case "/":
+                    ops.push(strArr.shift())
+                    break
+                default:
+                    vals.push(strArr.shift())
+            }
+        }
+    }
+
+    return vals.pop()
 }
+
+
+console.log(parse(target))
